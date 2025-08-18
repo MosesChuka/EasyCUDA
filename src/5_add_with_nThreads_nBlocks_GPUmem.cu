@@ -28,9 +28,13 @@ int main(void){
     int N = 1 <<20; // 1 million elements
     float *x, *y;
 
-    // Memory Allocation in CUDA
-    cudaMallocManaged(&x, N*sizeof(float));
-    cudaMallocManaged(&y, N*sizeof(float));
+    // Need to first initialize the memory before Prefetching, else a seg error occurs
+    cudaMallocManaged(&x,N*sizeof(float));
+    cudaMallocManaged(&y,N*sizeof(float));
+
+    // Memory Allocation in device instead of host(contrast to program 4)
+    cudaMemPrefetchAsync(x, N*sizeof(float),0,0); //the 0,0 represents the destination device and stream respectively. 
+    cudaMemPrefetchAsync(y, N*sizeof(float),0,0);
    
     int blockSize = 256;
     int numBlocks = (N + blockSize - 1)/blockSize;

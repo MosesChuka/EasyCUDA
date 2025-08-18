@@ -54,5 +54,4 @@ int main(void){
     cudaFree(y);
 
     return 0;
-    // Note that a data race will occure in the "add" kernel because it tries to access N element sin a single thread at once which is inefficient.
 }
